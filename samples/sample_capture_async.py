@@ -23,7 +23,7 @@ async def _main():
     frame_future1 = camera1.capture_async(settings)
     print("Capture second!")
     frame_future2 = camera2.capture_async(settings)
-    print("Capture second!")
+    print("Capture third!")
     frame_future3 = camera3.capture_async(settings)
     print("Awaiting them all!")
     frame1, frame2, frame3 = await asyncio.gather(
