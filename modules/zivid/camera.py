@@ -7,7 +7,6 @@ from zivid.settings_2d import Settings2D, _to_internal_settings2d
 from zivid.camera_info import _to_camera_info
 from zivid.camera_state import _to_camera_state
 
-
 class Camera:
     """Interface to one Zivid camera.
 
@@ -57,6 +56,23 @@ class Camera:
             return Frame(self.__impl.capture(_to_internal_settings(settings)))
         if isinstance(settings, Settings2D):
             return Frame2D(self.__impl.capture(_to_internal_settings2d(settings)))
+        raise TypeError("Unsupported settings type: {}".format(type(settings)))
+
+
+    def capture_async(self, settings):
+        """Capture a single frame or a single 2D frame.
+
+        Args:
+            settings: Settings to be used to capture. Can be either a Settings or Settings2D instance
+
+        Returns:
+            A Frame containing a 3D image plus metadata or a Frame2D containing a 2D image plus metadata.
+
+        Raises:
+            TypeError: If argument is neither a Settings or a Settings2D
+        """
+        if isinstance(settings, Settings):
+            return self.__impl.capture_async(_to_internal_settings(settings))
         raise TypeError("Unsupported settings type: {}".format(type(settings)))
 
     @property

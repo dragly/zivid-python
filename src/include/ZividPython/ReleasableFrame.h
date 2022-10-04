@@ -5,6 +5,9 @@
 #include <ZividPython/ReleasablePointCloud.h>
 #include <ZividPython/Wrappers.h>
 
+#include <future>
+#include <pybind11/pybind11.h>
+
 namespace ZividPython
 {
     class ReleasableFrame : public Releasable<Zivid::Frame>
@@ -19,6 +22,24 @@ namespace ZividPython
         ZIVID_PYTHON_FORWARD_0_ARGS(state)
         ZIVID_PYTHON_FORWARD_0_ARGS(info)
         ZIVID_PYTHON_FORWARD_0_ARGS(cameraInfo)
+    };
+
+    class FutureFrame
+    {
+    public:
+        FutureFrame(pybind11::object pyFuture, std::future<void> frame)
+            : m_pyFuture(std::move(pyFuture))
+            , m_frame(std::move(frame))
+        {}
+
+        pybind11::object await()
+        {
+            return m_pyFuture;
+        }
+
+    private:
+        pybind11::object m_pyFuture;
+        std::future<void> m_frame;
     };
 
     void wrapClass(pybind11::class_<ReleasableFrame> pyClass);
