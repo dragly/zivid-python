@@ -26,16 +26,10 @@ namespace ZividPython
                  py::arg("settings_2d"))
             .def("capture_async",
                  [](const ReleasableCamera &camera, const Zivid::Settings &settings) {
-                     auto cam = camera;
-                     std::cout << "Capture async!" << std::endl;
                      auto result = std::async(std::launch::async, [=]() mutable {
-                         std::cout << "Capture async starting!" << std::endl;
-                         auto result = cam.capture(settings);
-                         //f.attr("set_result")(cam.capture(settings));
-                         std::cout << "Capture async done!" << std::endl;
-                         return result;
+                         auto cam = camera;
+                         return cam.capture(settings);
                      });
-                     std::cout << "Returning!" << std::endl;
                      return FutureFrame(std::move(result));
                  })
             .def_property_readonly("state", &ReleasableCamera::state)

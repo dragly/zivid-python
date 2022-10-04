@@ -7,19 +7,13 @@ from zivid import Application, Settings
 async def _main():
     app = Application()
     camera1 = app.connect_camera()
-    # camera1 = app.create_file_camera("test/test_data/FileCameraZividOne.zfc")
-    camera2 = app.create_file_camera("test/test_data/FileCameraZividOne.zfc")
+    camera2 = app.connect_camera()
+    # camera2 = app.create_file_camera("test/test_data/FileCameraZividOne.zfc")
 
     settings = Settings()
     settings.acquisitions.append(Settings.Acquisition())
-    settings.acquisitions.append(Settings.Acquisition())
-    settings.acquisitions.append(Settings.Acquisition())
     settings.acquisitions[0].aperture = 5.6
     settings.acquisitions[0].exposure_time = datetime.timedelta(microseconds=100000)
-    settings.acquisitions[1].aperture = 5.6
-    settings.acquisitions[1].exposure_time = datetime.timedelta(microseconds=100000)
-    settings.acquisitions[2].aperture = 5.6
-    settings.acquisitions[2].exposure_time = datetime.timedelta(microseconds=100000)
     settings.processing.filters.outlier.removal.enabled = True
     settings.processing.filters.outlier.removal.threshold = 5.0
 
