@@ -28,16 +28,15 @@ namespace ZividPython
                  [](const ReleasableCamera &camera, const Zivid::Settings &settings) {
                      auto cam = camera;
                      std::cout << "Capture async!" << std::endl;
-                     py::object loop = py::module_::import("asyncio.events").attr("get_event_loop")();
-                     py::object f = loop.attr("create_future")();
                      auto result = std::async(std::launch::async, [=]() mutable {
                          std::cout << "Capture async starting!" << std::endl;
-                         cam.capture(settings);
+                         auto result = cam.capture(settings);
                          //f.attr("set_result")(cam.capture(settings));
                          std::cout << "Capture async done!" << std::endl;
+                         return result;
                      });
                      std::cout << "Returning!" << std::endl;
-                     return FutureFrame((f), std::move(result));
+                     return FutureFrame(std::move(result));
                  })
             .def_property_readonly("state", &ReleasableCamera::state)
             .def_property_readonly("info", &ReleasableCamera::info)

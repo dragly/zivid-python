@@ -27,19 +27,25 @@ namespace ZividPython
     class FutureFrame
     {
     public:
-        FutureFrame(pybind11::object pyFuture, std::future<void> frame)
-            : m_pyFuture(std::move(pyFuture))
-            , m_frame(std::move(frame))
+        FutureFrame(std::future<ReleasableFrame> frame)
+            : m_frame(std::move(frame))
         {}
 
         pybind11::object await()
         {
-            return m_pyFuture;
+            pybind11::object loop = pybind11::module_::import("asyncio.events").attr("get_event_loop")();
+            pybind11::object f = loop.attr("create_future")();
+            f.attr("set_result")(m_frame.get());
+            return f.attr("__await__")();
+        }
+
+        ReleasableFrame get()
+        {
+            return m_frame.get();
         }
 
     private:
-        pybind11::object m_pyFuture;
-        std::future<void> m_frame;
+        std::future<ReleasableFrame> m_frame;
     };
 
     void wrapClass(pybind11::class_<ReleasableFrame> pyClass);
