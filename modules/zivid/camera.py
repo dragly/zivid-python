@@ -1,4 +1,5 @@
 """Contains Camera class."""
+import asyncio
 import _zivid
 from zivid.frame import Frame
 from zivid.frame_2d import Frame2D
@@ -59,7 +60,7 @@ class Camera:
         raise TypeError("Unsupported settings type: {}".format(type(settings)))
 
 
-    def capture_async(self, settings):
+    async def capture_async(self, settings):
         """Capture a single frame or a single 2D frame.
 
         Args:
@@ -72,7 +73,10 @@ class Camera:
             TypeError: If argument is neither a Settings or a Settings2D
         """
         if isinstance(settings, Settings):
-            return self.__impl.capture_async(_to_internal_settings(settings))
+            frame_future = self.__impl.capture_async(_to_internal_settings(settings))
+            while not frame_future.is_ready():
+                await asyncio.sleep(0)
+            return Frame(frame_future.get())
         raise TypeError("Unsupported settings type: {}".format(type(settings)))
 
     @property

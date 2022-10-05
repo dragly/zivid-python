@@ -31,17 +31,22 @@ namespace ZividPython
             : m_frame(std::move(frame))
         {}
 
-        pybind11::object await()
-        {
-            pybind11::object loop = pybind11::module_::import("asyncio.events").attr("get_event_loop")();
-            pybind11::object f = loop.attr("create_future")();
-            f.attr("set_result")(m_frame.get());
-            return f.attr("__await__")();
-        }
+        //pybind11::object await()
+        //{
+        //pybind11::object loop = pybind11::module_::import("asyncio.events").attr("get_event_loop")();
+        //pybind11::object f = loop.attr("create_future")();
+        //f.attr("set_result")(m_frame.get());
+        //return f.attr("__await__")();
+        //}
 
         ReleasableFrame get()
         {
             return m_frame.get();
+        }
+
+        bool isReady()
+        {
+            return m_frame.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
         }
 
     private:
