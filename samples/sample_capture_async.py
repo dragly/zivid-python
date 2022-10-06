@@ -4,6 +4,12 @@ import datetime
 from zivid import Application, Settings
 
 
+async def _capture_with_delay(camera, settings, delay):
+    print(f"Delaying capture by {delay} seconds...)
+    await asyncio.sleep(delay)
+    print("Starting delayed capture...)
+    return await camera.capture_async(settings)
+
 async def _main():
     app = Application()
     camera1 = app.connect_camera()
@@ -23,9 +29,9 @@ async def _main():
     frame_future1 = camera1.capture_async(settings)
     print("Capture second!")
     frame_future2 = camera2.capture_async(settings)
-    print("Capture third!")
-    frame_future3 = camera3.capture_async(settings)
-    print("Awaiting them all!")
+    print("Capture third, with a delay...")
+    frame_future3 = _capture_with_delay(camera3, settings, 1.2)
+    print("Awaiting them all...")
     frame1, frame2, frame3 = await asyncio.gather(
         frame_future1,
         frame_future2,
