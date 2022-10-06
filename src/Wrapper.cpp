@@ -42,7 +42,6 @@ ZIVID_PYTHON_MODULE // NOLINT
     ZIVID_PYTHON_WRAP_CLASS_AS_RELEASABLE(module, Frame2D);
 
     auto futureFrame = pybind11::class_<ZividPython::FutureFrame>{ module, "FutureFrame" }
-                           //.def("__await__", &ZividPython::FutureFrame::await)
                            .def("get", &ZividPython::FutureFrame::get)
                            .def("is_ready", &ZividPython::FutureFrame::isReady);
 
