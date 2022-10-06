@@ -5,9 +5,9 @@ from zivid import Application, Settings
 
 
 async def _capture_with_delay(camera, settings, delay):
-    print(f"Delaying capture by {delay} seconds...)
+    print(f"Delaying capture by {delay} seconds...")
     await asyncio.sleep(delay)
-    print("Starting delayed capture...)
+    print("Starting delayed capture...")
     return await camera.capture_async(settings)
 
 async def _main():
@@ -15,13 +15,16 @@ async def _main():
     camera1 = app.connect_camera()
     camera2 = app.connect_camera()
     camera3 = app.connect_camera()
+
+    # Alternatively, use the following file cameras:
+    # camera1 = app.create_file_camera("test/test_data/FileCameraZividOne.zfc")
     # camera2 = app.create_file_camera("test/test_data/FileCameraZividOne.zfc")
     # camera3 = app.create_file_camera("test/test_data/FileCameraZividOne.zfc")
 
     settings = Settings()
     settings.acquisitions.append(Settings.Acquisition())
     settings.acquisitions[0].aperture = 5.6
-    settings.acquisitions[0].exposure_time = datetime.timedelta(microseconds=100000)
+    settings.acquisitions[0].exposure_time = datetime.timedelta(microseconds=10000)
     settings.processing.filters.outlier.removal.enabled = True
     settings.processing.filters.outlier.removal.threshold = 5.0
 
