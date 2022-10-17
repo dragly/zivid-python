@@ -32,6 +32,14 @@ namespace ZividPython
                      });
                      return FutureFrame(std::move(result));
                  })
+            .def("capture_2d_async",
+                 [](const ReleasableCamera &camera, const Zivid::Settings2D &settings) {
+                     auto result = std::async(std::launch::async, [=]() mutable {
+                         auto cam = camera;
+                         return cam.capture(settings);
+                     });
+                     return FutureFrame2D(std::move(result));
+                 })
             .def_property_readonly("state", &ReleasableCamera::state)
             .def_property_readonly("info", &ReleasableCamera::info)
             .def("write_user_data", &ReleasableCamera::writeUserData)

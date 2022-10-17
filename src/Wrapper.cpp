@@ -41,9 +41,12 @@ ZIVID_PYTHON_MODULE // NOLINT
     ZIVID_PYTHON_WRAP_CLASS_AS_RELEASABLE(module, Frame);
     ZIVID_PYTHON_WRAP_CLASS_AS_RELEASABLE(module, Frame2D);
 
-    auto futureFrame = pybind11::class_<ZividPython::FutureFrame>{ module, "FutureFrame" }
-                           .def("get", &ZividPython::FutureFrame::get)
-                           .def("is_ready", &ZividPython::FutureFrame::isReady);
+    pybind11::class_<ZividPython::FutureFrame>{ module, "FutureFrame" }
+        .def("get", &ZividPython::FutureFrame::get)
+        .def("is_ready", &ZividPython::FutureFrame::isReady);
+    pybind11::class_<ZividPython::FutureFrame2D>{ module, "FutureFrame2D" }
+        .def("get", &ZividPython::FutureFrame2D::get)
+        .def("is_ready", &ZividPython::FutureFrame2D::isReady);
 
     ZIVID_PYTHON_WRAP_CLASS_BUFFER_AS_RELEASABLE(module, ImageRGBA);
     ZIVID_PYTHON_WRAP_CLASS_BUFFER_AS_RELEASABLE(module, PointCloud);

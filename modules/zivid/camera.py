@@ -77,6 +77,11 @@ class Camera:
             while not frame_future.is_ready():
                 await asyncio.sleep(0)
             return Frame(frame_future.get())
+        if isinstance(settings, Settings2D):
+            frame_future = self.__impl.capture_2d_async(_to_internal_settings2d(settings))
+            while not frame_future.is_ready():
+                await asyncio.sleep(0)
+            return Frame2D(frame_future.get())
         raise TypeError("Unsupported settings type: {}".format(type(settings)))
 
     @property
